@@ -30,8 +30,8 @@ The server generates a self-signed TLS certificate at startup and is registered 
 
 ```bash
 # Build & push to ttl.sh (ephemeral registry, no account needed)
-docker build -t ttl.sh/cafe-apiservice:1h ./cafe-apiservice
-docker push ttl.sh/cafe-apiservice:1h
+docker build -t ghcr.io/qjoly/cafe-apiservice:latest ./cafe-apiservice
+docker push ghcr.io/qjoly/cafe-apiservice:latest
 
 # Deploy to the cluster
 kubectl apply -f cafe-apiservice/deploy.yaml

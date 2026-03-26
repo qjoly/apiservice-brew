@@ -9,6 +9,9 @@ on:
     paths:
       - "cafe-apiservice/**"
 
+permissions:
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -20,7 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: cafe-api-server
-          image: ttl.sh/cafe-apiservice:1h
+          image: ghcr.io/qjoly/cafe-apiservice:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
