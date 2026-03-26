@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cafe-api-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cafe-api-server
+  template:
+    metadata:
+      labels:
+        app: cafe-api-server
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: cafe-api-server
+          image: ttl.sh/cafe-apiservice:1h
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8443
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cafe-api-server
+  namespace: default
+spec:
+  selector:
+    app: cafe-api-server
+  ports:
+    - port: 443
+      targetPort: 8443
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.une-tasse-de.cafe
+spec:
+  group: une-tasse-de.cafe
+  version: v1alpha1
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: cafe-api-server
+    namespace: default
+    port: 443
+  insecureSkipTLSVerify: true
